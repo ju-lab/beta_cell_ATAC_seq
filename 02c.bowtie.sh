@@ -1,17 +1,16 @@
 #!/bin/bash
 cd /home/users/kjyi/Projects/temp_20180306
 
-for i in `find -L . | grep "1.fastq.gz$" | grep -v RNA`; do
-	sample_name=`echo $i | sed 's!.*/\([^/]*\)_1.fastq.gz$!\1!'`
-	dir=`echo $i | sed 's!./fastq!./bam!;s!\(.*\)/[^/]*!\1!'`
+for i in `find -L . | grep "1.fastq.gz$" | grep trim_ | grep -v RNA`; do
+	sample_name=`echo $i | sed 's!.*/\([^/]*\)_1.fastq.gz$!\1!;s!trim_!!'`
+	dir=`echo $i | sed 's!./fastq!./bowtie2!;s!\(.*\)/[^/]*!\1!;s!trim_!!'`
 	mkdir -p $dir
 	~/src/atac/run_atac_pipe.sh \
 		--output_bam $dir \
-		--process bowtie2 \
+		--process bowtie2,postalign \
 		$sample_name \
 		$i \
 		${i/1.fastq.gz/2.fastq.gz}
-	exit 0
 done
 
 exit 0
