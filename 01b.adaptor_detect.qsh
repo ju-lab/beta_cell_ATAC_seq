@@ -1,0 +1,101 @@
+#!/bin/bash
+#       ----------------
+#PBS -N adaptor_detect
+#       ----------------
+# This script run fastqc & multiqc for multiple files
+# This script is generaged by the command below
+# qchelp inputfiles.gz
+#
+#PBS -q day
+#PBS -o /dev/null
+#PBS -e /dev/null
+#PBS -l nodes=1:ppn=2,mem=8gb
+cd /home/users/kjyi/Projects/temp_20180306
+
+# output file
+TRIM=./01c.trim.qsh
+# parameter
+ERR_RATE=0.2 # cutadapt allow mismatch
+# input
+FILES="fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_1.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_2.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_1.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_2.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_1.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_2.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_1.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_2.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_1.fastq.gz fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_2.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_1.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_2.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_1.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_2.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_1.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_2.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_1.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_2.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_1.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_2.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_1.fastq.gz fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_2.fastq.gz fastq/ATAC-seq/MIN6/ATAC_MIN6_1.fastq.gz fastq/ATAC-seq/MIN6/ATAC_MIN6_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_2.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_1.fastq.gz fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_2.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_1.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_2.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_1.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_2.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_1.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_2.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_1.fastq.gz fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_2.fastq.gz"
+
+rm -rf $TRIM
+cat <<EOF > $TRIM
+#!/bin/bash
+#PBS -N cut_adapt
+#PBS -q day
+#PBS -o /dev/null
+#PBS -e /dev/null
+#PBS -l nodes=1:ppn=2,mem=8gb
+ERR_RATE=$ERR_RATE
+LOG=./log/cut_adapt.log
+mkdir -p ./log
+rm -rf \$LOG
+##############################
+EOF
+F=( $FILES )
+for ((i=0;i<=${#F[@]}-2;i=i+2));do
+	F1=${F[i]}
+	F2=${F[i+1]}
+	python3 ~/src/detect_adapter.py $F1 2>> $TRIM |
+	sed '$ s/^/AD1=/; $ s/\t/;F1=/' >> $TRIM
+	python3 ~/src/detect_adapter.py $F2 2>> $TRIM |
+	sed '$ s/^/AD2=/; $ s/\t/;F2=/' >> $TRIM
+	cat <<EOF >> $TRIM
+O1=\$(echo \$F1 | sed 's/[^/]*$/trim_&/');O2=\$(echo \$F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e $ERR_RATE -a \$AD1 -A \$AD2 -o \$O1 -p \$O2 \$F1 \$F2
+EOF
+done
+
+exit 0 #######################################
+./fastq/H4R3me2a_ChIP-seq
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_1.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_2.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_1.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_2.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_1.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_2.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_1.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_2.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_1.fastq.gz
+fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_2.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_1.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_2.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_1.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_2.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_1.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_2.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_1.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_2.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_1.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_2.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_1.fastq.gz
+fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_2.fastq.gz
+fastq/ATAC-seq/MIN6/ATAC_MIN6_1.fastq.gz
+fastq/ATAC-seq/MIN6/ATAC_MIN6_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_2.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_1.fastq.gz
+fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_2.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_1.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_2.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_1.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_2.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_1.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_2.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_1.fastq.gz
+fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_2.fastq.gz
+
+

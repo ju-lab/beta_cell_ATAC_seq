@@ -1,0 +1,293 @@
+#!/bin/bash
+#PBS -N cut_adapt
+#PBS -q day
+#PBS -j oe
+##PBS -o /dev/null
+##PBS -e /dev/null
+#PBS -l nodes=1:ppn=24
+#PBS -m ae
+#PBS -M kijong.yi@kaist.ac.kr
+cd $PBS_O_WORKDIR
+ERR_RATE=0.2
+LOG=./log/cut_adapt.log
+mkdir -p ./log
+
+rm -rf $LOG
+##############################
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	123	AGATCGGAAGAGC	250000			0.05%
+#  Nextera 	2	CTGTCTCTTATA	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_1.fastq.gz
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	351	AGATCGGAAGAGC	250000			0.14%
+#  Nextera 	5	CTGTCTCTTATA	250000			0.00%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	67	AGATCGGAAGAGC	250000			0.03%
+#  Nextera 	1	CTGTCTCTTATA	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_1.fastq.gz
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	143	AGATCGGAAGAGC	250000			0.06%
+#  Nextera 	3	CTGTCTCTTATA	250000			0.00%
+#  smallRNA	2	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	90	AGATCGGAAGAGC	250000			0.04%
+#  Nextera 	5	CTGTCTCTTATA	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_1.fastq.gz
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	179	AGATCGGAAGAGC	250000			0.07%
+#  Nextera 	6	CTGTCTCTTATA	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/H4R3me2a_ChIP-seq/H4R3me2a_ChIP-3_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	253	AGATCGGAAGAGC	250000			0.10%
+AD1=AGATCGGAAGAGC;F1=fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_1.fastq.gz
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	333	AGATCGGAAGAGC	250000			0.13%
+#  Nextera 	1	CTGTCTCTTATA	250000			0.00%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	421	AGATCGGAAGAGC	250000			0.17%
+#  Nextera 	2	CTGTCTCTTATA	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_1.fastq.gz
+#  fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	522	AGATCGGAAGAGC	250000			0.21%
+#  Nextera 	1	CTGTCTCTTATA	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/H4R3me2a_ChIP-seq/H4R3me2a_Input-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	61313	CTGTCTCTTATA	250000			24.53%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_1.fastq.gz
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	60323	CTGTCTCTTATA	250000			24.13%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	76685	CTGTCTCTTATA	250000			30.67%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_1.fastq.gz
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	77961	CTGTCTCTTATA	250000			31.18%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	74412	CTGTCTCTTATA	250000			29.76%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_1.fastq.gz
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	75076	CTGTCTCTTATA	250000			30.03%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-biKO-3_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	70447	CTGTCTCTTATA	250000			28.18%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_1.fastq.gz
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	69450	CTGTCTCTTATA	250000			27.78%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	83554	CTGTCTCTTATA	250000			33.42%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_1.fastq.gz
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	84751	CTGTCTCTTATA	250000			33.90%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	82752	CTGTCTCTTATA	250000			33.10%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_1.fastq.gz
+#  fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	83648	CTGTCTCTTATA	250000			33.46%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/ATAC-YFP-beta-cell/ATAC-YFP-CON-3_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/ATAC-seq/MIN6/ATAC_MIN6_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	77732	CTGTCTCTTATA	250000			31.09%
+AD1=CTGTCTCTTATA;F1=fastq/ATAC-seq/MIN6/ATAC_MIN6_1.fastq.gz
+#  fastq/ATAC-seq/MIN6/ATAC_MIN6_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Nextera 	78589	CTGTCTCTTATA	250000			31.44%
+AD2=CTGTCTCTTATA;F2=fastq/ATAC-seq/MIN6/ATAC_MIN6_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	50900	AGATCGGAAGAGC	250000			20.36%
+#  smallRNA	2	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	50402	AGATCGGAAGAGC	250000			20.16%
+#  smallRNA	4	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	55801	AGATCGGAAGAGC	250000			22.32%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	55695	AGATCGGAAGAGC	250000			22.28%
+#  Nextera 	2	CTGTCTCTTATA	250000			0.00%
+#  smallRNA	2	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_biko-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	1564	AGATCGGAAGAGC	250000			0.63%
+#  smallRNA	25	TGGAATTCTCGG	250000			0.01%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	1643	AGATCGGAAGAGC	250000			0.66%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	1480	AGATCGGAAGAGC	250000			0.59%
+#  smallRNA	16	TGGAATTCTCGG	250000			0.01%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	1519	AGATCGGAAGAGC	250000			0.61%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_12w/Prmt1_biKO_12w_con-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	824	AGATCGGAAGAGC	250000			0.33%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	831	AGATCGGAAGAGC	250000			0.33%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	530	AGATCGGAAGAGC	250000			0.21%
+#  smallRNA	2	TGGAATTCTCGG	250000			0.00%
+#  Nextera 	1	CTGTCTCTTATA	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_1.fastq.gz
+wait
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	536	AGATCGGAAGAGC	250000			0.21%
+#  Nextera 	1	CTGTCTCTTATA	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_biKO-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	490	AGATCGGAAGAGC	250000			0.20%
+#  smallRNA	3	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	478	AGATCGGAAGAGC	250000			0.19%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	457	AGATCGGAAGAGC	250000			0.18%
+#  smallRNA	5	TGGAATTCTCGG	250000			0.00%
+#  Nextera 	1	CTGTCTCTTATA	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	450	AGATCGGAAGAGC	250000			0.18%
+#  smallRNA	2	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_biKO_8w/Prmt1_biKO_8w_con-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	359	AGATCGGAAGAGC	250000			0.14%
+#  smallRNA	4	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	358	AGATCGGAAGAGC	250000			0.14%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	378	AGATCGGAAGAGC	250000			0.15%
+#  smallRNA	5	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	385	AGATCGGAAGAGC	250000			0.15%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_bKO-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	258	AGATCGGAAGAGC	250000			0.10%
+#  smallRNA	3	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	261	AGATCGGAAGAGC	250000			0.10%
+#  smallRNA	1	TGGAATTCTCGG	250000			0.00%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-1_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_1.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	320	AGATCGGAAGAGC	250000			0.13%
+#  smallRNA	9	TGGAATTCTCGG	250000			0.00%
+AD1=AGATCGGAAGAGC;F1=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_1.fastq.gz
+#  fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_2.fastq.gz
+#  Adapter type	Count	Sequence	Sequences analysed	Percentage
+#  Illumina	330	AGATCGGAAGAGC	250000			0.13%
+AD2=AGATCGGAAGAGC;F2=fastq/RNA-seq/Prmt1_bKO_12w/Prmt1_bKO_12w_con-2_2.fastq.gz
+O1=$(echo $F1 | sed 's/[^/]*$/trim_&/');O2=$(echo $F2 | sed 's/[^/]*$/trim_&/')
+cutadapt -m 5 -e 0.2 -a $AD1 -A $AD2 -o $O1 -p $O2 $F1 $F2 >>${F2/_2.fastq.gz/.trim.log} &
+wait
+
