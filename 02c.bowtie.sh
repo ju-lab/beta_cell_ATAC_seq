@@ -7,5 +7,5 @@ for i in `find -L fastq/ATAC-seq | grep "1.fastq.gz$" | grep trim_ `; do
 		--output_bam $dir \
 		$sample \
 		$i \
-		${i/1.fastq.gz/2.fastq.gz}
+		${i/1.fastq.gz/2.fastq.gz} 
 done
