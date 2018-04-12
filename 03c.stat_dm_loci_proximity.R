@@ -4,58 +4,77 @@
 suppressMessages(library(tidyverse))
 library(stringr)
 
-MIN6 <- read_tsv("processed2/MIN6_peak_annotated_20180411.bed",
+MIN6 <- read_tsv("processed3/MIN6_peak_annotated_20180412.bed",
 				 col_types = "ciicdddciicccciicccciiciiiddiiil")
-
-# basic strategy and statistics
-nrow(MIN6) # number of MIN6 peaks
-table(MIN6$difpeak) # differential peak
-(mis <- apply(MIN6, 2, function(x) sum(is.na(x)))) # missing values
-mis["mmnear_gid"] # mm genes with no near genes within >20kb, no orthology also
-MIN6 %>% filter(is.na(.$mmnear_gid))
-
-MIN6 %>% filter(!is.na(.$mmnear_gid)) %>%
-	{!is.na(.$hgpeakalign_chr)} %>% table # peak mapped to somewhere in tad habouring orgology gene
-MIN6 %>% filter(!is.na(.$mmnear_gid)) $ # peak mapped to somewhere in tad habouring orgology gene
-
-MIN6 %>% filter(!is.na(.$mmnear_gid)) %>%
- {.$phastcons_mm_overlap > 0} %>% table # phastcon_mm overlap: mm peak is conserved region
-
-
-MIN6 %>% filter(!is.na(.$mmnear_gid)) %>%
-	transmute(phastcons_overlap = phastcons_mm_overlap > 0,
-			  eval_cut = (!is.na(hgpeakalign_chr)) & hgpeakalign_eval <= 0.0001) %>%
-	table() %>% gmodels::CrossTable() # 92% of blast results were phastcons-conserved region
-
-MIN6 %>% filter(!is.na(mmnear_gid),
-				phastcons_mm_overlap > 0,
-				(!is.na(hgpeakalign_chr)) & hgpeakalign_eval <= 0.0001) %>%
-	{print(nrow(.)); .} %>% # final orthology matched peaks
-	.$difpeak %>% table  #and differential peaks
 
 conserved_peaks <- MIN6 %>% filter(!is.na(mmnear_gid),
 								   phastcons_mm_overlap > 0,
 								   (!is.na(hgpeakalign_chr)) & hgpeakalign_eval <= 0.0001)
-conserved_peaks %>%
-	ggplot(aes(x = dmloci_count_within_500kb, fill = difpeak)) +
-	geom_histogram(binwidth = 1)
 
-# with(conserved_peaks,
-# 	 boxplot(dmloci_count_within_500kb[difpeak],
-# 	 		dmloci_count_within_500kb[!difpeak])) #severely ugly plot
-
-with(conserved_peaks,table(dmloci_count_within_500kb, difpeak))
-
-conserved_peaks %>% select(dmloci_count_within_500kb, difpeak) %>%
-	rename(ndmloci = dmloci_count_within_500kb) %>%
+conserved_peaks %>% select(difpeak, dist_closest_dmloci) %>%
+	rename(dist = dist_closest_dmloci) %>%
+	arrange(dist) %>%
 	group_by(difpeak) %>%
-	summarize(median = median(ndmloci),
-			  mean = mean(ndmloci),
-			  max = max(ndmloci),
-			  min = min(ndmloci))
+	summarize(min = min(dist), median = median(dist), mean = mean(dist),
+			  max = max(dist))
 
-with(conserved_peaks,
-	 t.test(dmloci_count_within_500kb[difpeak],
-	 	    dmloci_count_within_500kb[!difpeak]))
-# distance calculation to closest
+conserved_peaks %>% select(difpeak, dist_closest_dmloci) %>%
+	rename(dist = dist_closest_dmloci) %>%
+	group_by(difpeak) %>%
+	arrange(dist) %>%
+	mutate(n = row_number(),
+		   r = n/max(n)) -> plotdata
+plotdata %>%
+	ggplot(aes(x = dist, y = r, color = difpeak)) + geom_point()
+plotdata %>%
+	ggplot(aes(x = log10(dist), y = r, color = difpeak)) + geom_point()
+plotdata %>%
+	ggplot(aes(x = dist, y = r, color = difpeak)) + geom_point() + coord_cartesian(xlim = c(0,500000), ylim = c(0, 0.45))
+library(manipulate)
+manipulate(ggplot(plotdata, aes(x = dist, y = r, color = difpeak)) + geom_point() + coord_cartesian(xlim = c(0,15000 * XLIM), ylim = c(0, YLIM / 1000)),
+		   XLIM = slider(0, 100, initial = 6),
+		   YLIM = slider(0, 1000, initial = 93))
+plotdata
 
+par(fig = c(0,1,0,1))
+plot(plotdata$dist, plotdata$r, pch = 20, col = c("black", "red")[plotdata$difpeak + 1], cex = 0.5,xlim = c(0, 15000*200),
+	 xlab = "Distances from ATAC-seq peaks to the closest diabetes-assotiated loci",
+	 ylab = "Cumulative proportion", las = 1, xaxt = "n")
+X <- 0:3 * 1000000
+axis(1, X, labels = prettyNum(X, big.mark = ","))
+
+legend("topleft", bty = "n", legend = c("Non-differential peaks","Differential peaks (Prmt1-KO vs. WT)"), pch = 20, col = c("black", "red"))
+rect(0, 0, 90000, 93/1000, density = NULL, angle = 45, lty = 2)
+par(fig = c(0.4, 0.95, 0.08, 0.7), new = TRUE)
+plot(plotdata$dist, plotdata$r, pch = 20, col = c("black", "red")[plotdata$difpeak + 1], cex = 0.5, xlim = c(0, 15000*6), ylim = c(0, 93/1000),
+	 xlab = "",
+	 ylab = "", las = 1, xaxt = "n")
+X <- 0:3 * 30000
+axis(1, X, labels = prettyNum(X, big.mark = ","))
+par(fig = c(0,1,0,1))
+# ,
+
+plotdata
+
+difpeak_dist <- plotdata$dist[plotdata$difpeak == TRUE]
+nondifpeak_dist <- plotdata$dist[plotdata$difpeak == FALSE]
+A <- length(difpeak_dist)
+B <- length(nondifpeak_dist)
+C <- seq(1, B, by = A)
+# C <- (1:A) * B %/% A
+nondifpeak_dist_sampled <- nondifpeak_dist[C]
+t.test(difpeak_dist, nondifpeak_dist)
+nondifpeak_dist_sampled - difpeak_dist -> dist_dif
+table(dist_dif > 0)
+
+remove_outliers <- function(x, na.rm = TRUE, ...) {
+	qnt <- quantile(x, probs=c(.4, .6), na.rm = na.rm, ...)
+	H <- 1.5 * IQR(x, na.rm = na.rm)
+	y <- x
+	y[x < (qnt[1] - H)] <- NA
+	y[x > (qnt[2] + H)] <- NA
+	y
+}
+remove_outliers(dist_dif) %>% hist
+(dist_dif>0) %>% table
+plot(nondifpeak_dist)
