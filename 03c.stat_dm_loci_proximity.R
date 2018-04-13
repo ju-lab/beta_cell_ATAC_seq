@@ -35,24 +35,26 @@ manipulate(ggplot(plotdata, aes(x = dist, y = r, color = difpeak)) + geom_point(
 		   XLIM = slider(0, 100, initial = 6),
 		   YLIM = slider(0, 1000, initial = 93))
 plotdata
-
+library(svglite)
+svglite( width = 7, height = 6, file = "Rplot_pvalue.svg")
 par(fig = c(0,1,0,1))
-plot(plotdata$dist, plotdata$r, pch = 20, col = c("black", "red")[plotdata$difpeak + 1], cex = 0.5,xlim = c(0, 15000*200),
-	 xlab = "Distances from ATAC-seq peaks to the closest diabetes-assotiated loci",
+plot(plotdata$dist/1000, plotdata$r, pch = 20, col = c("black", "red")[plotdata$difpeak + 1], cex = 0.5,xlim = c(0, 15*200),
+	 xlab = "Distances from ATAC-seq peaks to the closest diabetes-assotiated loci(kbps)",
 	 ylab = "Cumulative proportion", las = 1, xaxt = "n")
-X <- 0:3 * 1000000
+X <- 0:3 * 1000
 axis(1, X, labels = prettyNum(X, big.mark = ","))
-
+legend("topleft", bty = "n", legend = c("", "", "p-value* = 0.0003739"))
 legend("topleft", bty = "n", legend = c("Non-differential peaks","Differential peaks (Prmt1-KO vs. WT)"), pch = 20, col = c("black", "red"))
-rect(0, 0, 90000, 93/1000, density = NULL, angle = 45, lty = 2)
+rect(0, 0, 90, 93/1000, density = NULL, angle = 45, lty = 2)
 par(fig = c(0.4, 0.95, 0.08, 0.7), new = TRUE)
-plot(plotdata$dist, plotdata$r, pch = 20, col = c("black", "red")[plotdata$difpeak + 1], cex = 0.5, xlim = c(0, 15000*6), ylim = c(0, 93/1000),
+plot(plotdata$dist/1000, plotdata$r, pch = 20, col = c("black", "red")[plotdata$difpeak + 1], cex = 0.5, xlim = c(0, 15*6), ylim = c(0, 93/1000),
 	 xlab = "",
 	 ylab = "", las = 1, xaxt = "n")
-X <- 0:3 * 30000
+X <- 0:3 * 30
 axis(1, X, labels = prettyNum(X, big.mark = ","))
 par(fig = c(0,1,0,1))
-# ,
+dev.off()
+ # ,
 
 plotdata
 
@@ -60,21 +62,13 @@ difpeak_dist <- plotdata$dist[plotdata$difpeak == TRUE]
 nondifpeak_dist <- plotdata$dist[plotdata$difpeak == FALSE]
 A <- length(difpeak_dist)
 B <- length(nondifpeak_dist)
-C <- seq(1, B, by = A)
-# C <- (1:A) * B %/% A
+C <- seq(1, B, length.out = A) %>% round
+#C <- (1:A) * B %/% A
 nondifpeak_dist_sampled <- nondifpeak_dist[C]
 t.test(difpeak_dist, nondifpeak_dist)
 nondifpeak_dist_sampled - difpeak_dist -> dist_dif
-table(dist_dif > 0)
+table(dist_dif[1:(A %/% 2)] > 0)
+nondifpeak_dist_sampled[1:(A %/% 2)]
+t.test(difpeak_dist, nondifpeak_dist_sampled, paired=TRUE)
+t.test(difpeak_dist[1:(A %/% 2)], nondifpeak_dist_sampled[1:(A %/% 2)], paired=TRUE)
 
-remove_outliers <- function(x, na.rm = TRUE, ...) {
-	qnt <- quantile(x, probs=c(.4, .6), na.rm = na.rm, ...)
-	H <- 1.5 * IQR(x, na.rm = na.rm)
-	y <- x
-	y[x < (qnt[1] - H)] <- NA
-	y[x > (qnt[2] + H)] <- NA
-	y
-}
-remove_outliers(dist_dif) %>% hist
-(dist_dif>0) %>% table
-plot(nondifpeak_dist)
