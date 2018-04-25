@@ -18,6 +18,7 @@ gwas_dm_hg19=gwas_dm_hg19.tsv
 
 diff=ATAC-seq_depleted_region.bed
 difid=depleted_peak_id.txt
+
 cat << escape > /dev/null
 # trim chr name of phastcons file
 cut -f 2,3,4 $cons_orig | sed 's/^chrM/chrMT/;s/^chr//' > $conserved
@@ -65,7 +66,6 @@ bedtools intersect -a $min6_h -b $gwas_dm_hg19 -c > $min6_hc
 # annotate is the peaks differential peak
 tail -n+2 $diff | cut -f4 > $difid
 
-escape
 
 R --slave << EOF > /dev/null
 suppressMessages(library(tidyverse))
@@ -86,6 +86,7 @@ mydata %>%
 EOF
 rm $min6_b $min6_c $min6_h $min6_hc $conserved $gwas_dm $gwas_dm_hg19 $difid
 
+escape
 # Example output importing R cmd
 #> MIN6 <- readr::read_tsv("processed2/MIN6_peak_annotated_20180411.bed",
 #+				 col_types = "ciicdddciicccciicccciiciiiddiiil")
